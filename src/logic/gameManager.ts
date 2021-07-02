@@ -1,6 +1,6 @@
-import { __playerSize__, __playerSpeed__ } from "../lib/constants";
+import { Entity, GameState, PlayerEntity } from "aelienz-types";
+import { __images__, __playerSpeed__ } from "../lib/constants";
 import { socket } from "../lib/socket";
-import { Client, State, Transform } from "../lib/types";
 
 interface GameScreens {
 	lobby: HTMLElement;
@@ -12,11 +12,11 @@ export default class GameManager {
 	private screens: GameScreens;
 	private ctx: CanvasRenderingContext2D;
 	private alive = false;
-	private state: State = {
-		clients: []
+	private state: GameState = {
+		entities: []
 	};
 	private keysDown = new Set<string>();
-	private keyboardInterval: NodeJS.Timeout;
+	private keyboardInterval: any;
 
 	public constructor(screens: GameScreens, ctx: CanvasRenderingContext2D) {
 		this.screens = screens;
@@ -25,13 +25,17 @@ export default class GameManager {
 
 	public joinClient(
 		name = "Anonymous",
-		transform = { x: 0, y: 0, rotation: 0 }
+		transform = {
+			x: window.innerWidth / 2,
+			y: window.innerHeight / 2,
+			rotation: 0
+		}
 	) {
-		socket.emit("client-join", {
-			socket: { id: socket.id },
+		socket.emit("player-join", {
 			player: { name },
-			transform
-		} as Client);
+			transform,
+			image: __images__.player
+		});
 	}
 
 	private onKeyDown({ key }: KeyboardEvent) {
@@ -50,7 +54,11 @@ export default class GameManager {
 		if (this.keysDown.has("s")) vel.y += __playerSpeed__;
 		if (this.keysDown.has("d")) vel.x += __playerSpeed__;
 
-		socket.emit("player-move", { socket: { id: socket.id }, vel });
+		socket.emit("player-move", vel);
+	}
+
+	private onBlur() {
+		this.keysDown = new Set<string>();
 	}
 
 	public awake() {
@@ -60,6 +68,8 @@ export default class GameManager {
 		this.keysDown = new Set<string>();
 		window.addEventListener("keydown", (e) => this.onKeyDown(e));
 		window.addEventListener("keyup", (e) => this.onKeyUp(e));
+
+		window.addEventListener("blur", () => this.onBlur());
 
 		this.keyboardInterval = setInterval(
 			() => this.movePlayer(),
@@ -83,6 +93,8 @@ export default class GameManager {
 		window.removeEventListener("keydown", (e) => this.onKeyDown(e));
 		window.removeEventListener("keyup", (e) => this.onKeyUp(e));
 
+		window.removeEventListener("blur", () => this.onBlur());
+
 		this.screens.lobby.style.display = "block";
 		this.screens.game.style.display = "none";
 	}
@@ -97,18 +109,29 @@ export default class GameManager {
 		this.ctx.fillStyle = "#000000";
 		this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-		this.ctx.fillStyle = "#FFFFFF";
-		for (const client of this.state.clients) {
-			this.renderEntity(client.transform, __playerSize__);
+		for (const entity of this.state.entities) {
+			this.renderEntity(entity);
 		}
 	}
 
-	private renderEntity(transform: Transform, size: number) {
-		this.ctx.fillRect(
-			window.innerWidth / 2 + transform.x - size / 2,
-			window.innerHeight / 2 + transform.y - size / 2,
-			size,
-			size
-		);
+	private renderEntity(entity: Entity | PlayerEntity) {
+		const entityImage = new Image();
+		entityImage.src = entity.image;
+
+		this.ctx.drawImage(entityImage, entity.transform.x, entity.transform.y);
+
+		const playerEntity = <PlayerEntity>entity;
+		if (playerEntity.player) {
+			this.ctx.fillStyle = "#FFFFFF";
+			this.ctx.font = "30px Arial";
+
+			this.ctx.fillText(
+				playerEntity.player.name,
+				entity.transform.x +
+					entityImage.width / 2 -
+					this.ctx.measureText(playerEntity.player.name).width / 2,
+				entity.transform.y - 10
+			);
+		}
 	}
 }
