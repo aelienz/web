@@ -8,7 +8,7 @@ interface GameScreens {
 }
 
 export default class GameManager {
-	public static readonly KEYBOARD_PING = 20;
+	public static readonly KEYBOARD_PING = 10;
 	private screens: GameScreens;
 	private ctx: CanvasRenderingContext2D;
 	private alive = false;
