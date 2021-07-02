@@ -1,0 +1,26 @@
+{
+	"name": "aelienz-web",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://github.com/aelienz/web.git",
+	"author": {
+		"name": "mathletedev",
+		"email": "mathletedev@gmail.com"
+	},
+	"scripts": {
+		"bundle": "NODE_ENV=development npx webpack"
+	},
+	"license": "Apache-2.0",
+	"private": true,
+	"dependencies": {
+		"socket.io-client": "^4.1.2"
+	},
+	"devDependencies": {
+		"@types/lodash": "^4.14.170",
+		"@types/node": "^15.14.0",
+		"ts-loader": "^9.2.3",
+		"typescript": "^4.3.5",
+		"webpack": "^5.41.1",
+		"webpack-cli": "^4.7.2"
+	}
+}

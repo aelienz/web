@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<title>Aelienz</title>
+		<script>
+			const exports = { __esModule: true };
+		</script>
+		<script defer src="../dist/bundle.js"></script>
+		<link rel="stylesheet" href="./styles/main.css"">
+	</head>
+	<body>
+		<div id="lobby">
+			<form id="join-form">
+				<input
+					id="name-input"
+					type="text"
+					placeholder="Press Enter to Join..."
+				/>
+			</form>
+		</div>
+		<div id="game">
+			<canvas id="canvas"></canvas>
+		</div>
+	</body>
+</html>
