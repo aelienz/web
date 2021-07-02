@@ -8,7 +8,7 @@
 		"email": "mathletedev@gmail.com"
 	},
 	"scripts": {
-		"dev": "NODE_ENV=development npx webpack",
+		"dev": "NODE_ENV=development npx webpack --env watch",
 		"bundle": "npx webpack"
 	},
 	"license": "Apache-2.0",
