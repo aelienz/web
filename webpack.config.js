@@ -18,6 +18,5 @@ module.exports = {
 		filename: "bundle.js",
 		path: path.resolve(__dirname, "public/dist")
 	},
-	watch: true,
 	stats: "errors-only"
 };
