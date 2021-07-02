@@ -8,6 +8,7 @@ interface GameScreens {
 }
 
 export default class GameManager {
+	public static readonly KEYBOARD_PING = 20;
 	private screens: GameScreens;
 	private ctx: CanvasRenderingContext2D;
 	private alive = false;
@@ -60,7 +61,10 @@ export default class GameManager {
 		window.addEventListener("keydown", (e) => this.onKeyDown(e));
 		window.addEventListener("keyup", (e) => this.onKeyUp(e));
 
-		this.keyboardInterval = setInterval(() => this.movePlayer(), 20);
+		this.keyboardInterval = setInterval(
+			() => this.movePlayer(),
+			GameManager.KEYBOARD_PING
+		);
 
 		this.screens.game.style.display = "block";
 		this.screens.lobby.style.display = "none";
