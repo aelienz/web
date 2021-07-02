@@ -2,7 +2,10 @@
 /node_modules
 
 # output
-/dist
+**/dist
 
 # environment variables
 .env
+
+# hosting
+/.firebase
