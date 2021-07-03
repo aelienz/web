@@ -8,6 +8,7 @@ interface GameScreens {
 }
 
 export default class GameManager {
+	public static readonly KEYBOARD_PING = 10;
 	private screens: GameScreens;
 	private ctx: CanvasRenderingContext2D;
 	private alive = false;
@@ -15,6 +16,7 @@ export default class GameManager {
 		entities: []
 	};
 	private keysDown = new Set<string>();
+	private keyboardInterval: any;
 
 	public constructor(screens: GameScreens, ctx: CanvasRenderingContext2D) {
 		this.screens = screens;
@@ -69,6 +71,11 @@ export default class GameManager {
 
 		window.addEventListener("blur", () => this.onBlur());
 
+		this.keyboardInterval = setInterval(
+			() => this.movePlayer(),
+			GameManager.KEYBOARD_PING
+		);
+
 		this.screens.game.style.display = "block";
 		this.screens.lobby.style.display = "none";
 	}
@@ -80,6 +87,8 @@ export default class GameManager {
 	public destroy() {
 		this.alive = false;
 		socket.off("heartbeat");
+
+		clearInterval(this.keyboardInterval);
 
 		window.removeEventListener("keydown", (e) => this.onKeyDown(e));
 		window.removeEventListener("keyup", (e) => this.onKeyUp(e));
@@ -103,8 +112,6 @@ export default class GameManager {
 		for (const entity of this.state.entities) {
 			this.renderEntity(entity);
 		}
-
-		this.movePlayer();
 	}
 
 	private renderEntity(entity: Entity | PlayerEntity) {
