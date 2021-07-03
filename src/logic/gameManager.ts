@@ -134,6 +134,8 @@ export default class GameManager {
 		entity: Entity | PlayerEntity,
 		perspective: PlayerEntity
 	) {
+		if (!perspective) return;
+
 		const entityImage = this.loadedImages[entity.image];
 		if (!(entityImage instanceof HTMLImageElement)) return;
 
