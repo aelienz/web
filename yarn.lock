@@ -206,10 +206,10 @@ acorn@^8.2.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.4.1.tgz#56c36251fc7cabc7096adc18f05afe814321a28c"
   integrity sha512-asabaBSkEKosYKMITunzX177CXxQ4Q8BSSzMTKD+FefUhipQC70gfW5SiUDhYQ3vk8G+81HqQk7Fv9OXwwn9KA==
 
-aelienz-types@^1.0.16:
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/aelienz-types/-/aelienz-types-1.0.16.tgz#dc8fc84797ada2499b6821088dd7b03257f69c89"
-  integrity sha512-Gk8K5sYwRqZ777ro4EnR9W8DPrZAocuE+QLpNQL6SJ6Lrxf87Yqkw/U4nMSZvQdatRnl0KJ+Ru7ZggXcEtAWFw==
+aelienz-types@^1.0.19:
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/aelienz-types/-/aelienz-types-1.0.19.tgz#97546a8c1d7637ad4644fa22b1b9b2fbe9f14dbc"
+  integrity sha512-qDlJpXyQS2R07eZLvt9lX7K/VnMzuxouvl32nD0FmaXhfxs+DkJ2JLzS8MaMcuhuErN2ihWJAjQ7h9jMrI/XLg==
 
 ajv-keywords@^3.5.2:
   version "3.5.2"

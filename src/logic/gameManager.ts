@@ -34,7 +34,7 @@ export default class GameManager {
 			loadedImage.onload = () => (this.loadedImages[image.name] = loadedImage);
 		}
 
-		socket.on("disconnect", () => this.destroy());
+		socket.on("destroy", () => this.destroy());
 	}
 
 	public joinClient(
@@ -46,9 +46,8 @@ export default class GameManager {
 		}
 	) {
 		socket.emit("player-join", {
-			player: { name: name || "Unnamed" },
-			transform,
-			image: "player"
+			player: { name: name || "Unnamed", hp: 100 },
+			transform
 		});
 	}
 
@@ -164,6 +163,17 @@ export default class GameManager {
 					entityImage.width / 2 -
 					this.ctx.measureText(entity.player.name).width / 2,
 				y
+			);
+
+			this.ctx.font = "24px Arial";
+
+			this.ctx.fillText(
+				Math.round(entity.player.hp).toString(),
+				x +
+					entityImage.width / 2 -
+					this.ctx.measureText(Math.round(entity.player.hp).toString()).width /
+						2,
+				y + entityImage.height + 15
 			);
 		}
 	}
