@@ -33,6 +33,8 @@ export default class GameManager {
 
 			loadedImage.onload = () => (this.loadedImages[image.name] = loadedImage);
 		}
+
+		socket.on("disconnect", () => this.destroy());
 	}
 
 	public joinClient(
