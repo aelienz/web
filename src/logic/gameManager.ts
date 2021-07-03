@@ -128,6 +128,8 @@ export default class GameManager {
 
 	private renderEntity(entity: Entity | PlayerEntity) {
 		const entityImage = this.loadedImages[entity.image];
+		if (!(entityImage instanceof HTMLImageElement)) return;
+
 		this.ctx.drawImage(entityImage, entity.transform.x, entity.transform.y);
 
 		if ("player" in entity) {
