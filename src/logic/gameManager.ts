@@ -17,10 +17,22 @@ export default class GameManager {
 	};
 	private keysDown = new Set<string>();
 	private keyboardInterval: any;
+	private loadedImages: Record<string, HTMLImageElement> = {};
 
 	public constructor(screens: GameScreens, ctx: CanvasRenderingContext2D) {
 		this.screens = screens;
 		this.ctx = ctx;
+
+		this.init();
+	}
+
+	private init() {
+		for (const image of __images__) {
+			const loadedImage = new Image();
+			loadedImage.src = image.src;
+
+			loadedImage.onload = () => (this.loadedImages[image.name] = loadedImage);
+		}
 	}
 
 	public joinClient(
@@ -34,7 +46,7 @@ export default class GameManager {
 		socket.emit("player-join", {
 			player: { name },
 			transform,
-			image: __images__.player
+			image: "player"
 		});
 	}
 
@@ -115,9 +127,7 @@ export default class GameManager {
 	}
 
 	private renderEntity(entity: Entity | PlayerEntity) {
-		const entityImage = new Image();
-		entityImage.src = entity.image;
-
+		const entityImage = this.loadedImages[entity.image];
 		this.ctx.drawImage(entityImage, entity.transform.x, entity.transform.y);
 
 		if ("player" in entity) {
