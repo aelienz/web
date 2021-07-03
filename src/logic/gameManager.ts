@@ -36,7 +36,7 @@ export default class GameManager {
 	}
 
 	public joinClient(
-		name = "Anonymous",
+		name: string,
 		transform = {
 			x: window.innerWidth / 2,
 			y: window.innerHeight / 2,
@@ -44,7 +44,7 @@ export default class GameManager {
 		}
 	) {
 		socket.emit("player-join", {
-			player: { name },
+			player: { name: name || "Unnamed" },
 			transform,
 			image: "player"
 		});
@@ -121,16 +121,34 @@ export default class GameManager {
 		this.ctx.fillStyle = "#000000";
 		this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-		for (const entity of this.state.entities) {
-			this.renderEntity(entity);
-		}
+		const me = <PlayerEntity>(
+			this.state.entities.find(
+				(entity) => "player" in entity && entity.socket.id === socket.id
+			)
+		);
+
+		for (const entity of this.state.entities) this.renderEntity(entity, me);
 	}
 
-	private renderEntity(entity: Entity | PlayerEntity) {
+	private renderEntity(
+		entity: Entity | PlayerEntity,
+		perspective: PlayerEntity
+	) {
 		const entityImage = this.loadedImages[entity.image];
 		if (!(entityImage instanceof HTMLImageElement)) return;
 
-		this.ctx.drawImage(entityImage, entity.transform.x, entity.transform.y);
+		let { x, y } = Object.assign({}, entity.transform);
+		if ("player" in entity && entity.socket.id === perspective.socket.id)
+			x = y = 0;
+		else {
+			x -= perspective.transform.x;
+			y -= perspective.transform.y;
+		}
+
+		x += window.innerWidth / 2 - entityImage.width / 2;
+		y += window.innerHeight / 2 - entityImage.height / 2;
+
+		this.ctx.drawImage(entityImage, x, y);
 
 		if ("player" in entity) {
 			this.ctx.fillStyle = "#FFFFFF";
@@ -138,10 +156,10 @@ export default class GameManager {
 
 			this.ctx.fillText(
 				entity.player.name,
-				entity.transform.x +
+				x +
 					entityImage.width / 2 -
 					this.ctx.measureText(entity.player.name).width / 2,
-				entity.transform.y
+				y
 			);
 		}
 	}
