@@ -129,7 +129,7 @@ export default class GameManager {
 				entity.transform.x +
 					entityImage.width / 2 -
 					this.ctx.measureText(entity.player.name).width / 2,
-				entity.transform.y - 10
+				entity.transform.y
 			);
 		}
 	}
